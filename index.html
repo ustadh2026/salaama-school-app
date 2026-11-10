@@ -1,0 +1,369 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>SALAAMA MUSLIM JUNIOR SCHOOL</title>
+<link rel="icon" href="logo.png">
+<link rel="manifest" href="manifest.json">
+<meta name="theme-color" content="#2E42C2">
+<style>
+:root{--blue:#2E42C2;--gold:#F2C94C;--green:#2E9E4F;--bg:#F8F9FF}
+*{box-sizing:border-box;font-family:Arial,sans-serif}body{margin:0;background:var(--bg);color:#222}
+.screen{display:none;min-height:100vh}.screen.active{display:block}
+.topbar{background:var(--blue);color:#fff;padding:10px;display:flex;align-items:center;gap:8px;position:sticky;top:0;z-index:20}
+.topbar img{width:34px;height:34px;background:#fff;border-radius:50%;object-fit:contain}
+.topbar b{font-size:13px}.topbar span{color:var(--gold);font-size:11px}
+.back{background:var(--gold);border:none;padding:7px 10px;border-radius:8px;font-weight:bold;cursor:pointer}
+.hamburger{background:rgba(255,255,255,.2);border:1px solid rgba(255,255,255,.4);width:36px;height:36px;border-radius:9px;cursor:pointer;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;flex-shrink:0}
+.hamburger span{display:block;width:18px;height:2px;background:#fff;border-radius:2px}
+.wrap{max-width:540px;margin:auto;padding:12px;padding-bottom:90px}
+.card{background:#fff;border-radius:14px;padding:14px;margin-bottom:12px;box-shadow:0 2px 10px #0001;border:1px solid #EEF1FF}
+.card h3{color:var(--blue);margin:0 0 6px;font-size:15px}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.tile{background:#fff;border-radius:14px;padding:16px 6px;text-align:center;cursor:pointer;box-shadow:0 2px 10px #0001;border:2px solid transparent}
+.tile:active{border-color:var(--gold);transform:scale(.97)}
+.tile .ic{font-size:30px}.tile b{display:block;color:var(--blue);font-size:13px;margin-top:6px}.tile span{font-size:11px;color:#666}
+.roleCard{background:#fff;border-radius:14px;padding:14px;margin-bottom:10px;box-shadow:0 2px 10px #0001;border:2px solid #eee;cursor:pointer}
+.roleCard.approved{border-color:var(--green);background:#E8F5E9}
+.roleCard.pending{border-color:#FF9800;background:#FFF3E0}
+.btn{background:var(--blue);color:#fff;border:none;padding:12px;border-radius:12px;width:100%;font-weight:bold;margin-top:8px;cursor:pointer}
+.btn:disabled{opacity:.6}.btn-gold{background:var(--gold);color:#222}.btn-green{background:var(--green)}.btn-red{background:#E53935}
+input,select,textarea{width:100%;padding:11px;border:1px solid #ddd;border-radius:12px;margin-top:8px}
+.passWrap{position:relative;margin-top:8px}.passWrap input{margin-top:0;padding-right:60px}.eyeBtn{position:absolute;right:6px;top:50%;transform:translateY(-50%);width:52px;height:40px;border:none;background:#EEF1FF;border-radius:10px;font-size:11px;font-weight:800;color:#2E42C2;cursor:pointer}
+.statGrid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-bottom:12px}
+.stat{border-radius:12px;padding:10px;text-align:center;color:#fff;background:var(--blue)}.stat:nth-child(2){background:var(--green)}.stat:nth-child(3){background:var(--gold);color:#222}.stat b{font-size:15px;display:block}
+.badge-green{background:#2E9E4F;color:#fff;padding:3px 8px;border-radius:10px;font-size:11px;font-weight:bold}
+.badge-orange{background:#FF9800;color:#fff;padding:3px 8px;border-radius:10px;font-size:11px;font-weight:bold}
+.badge-grey{background:#eee;color:#666;padding:3px 8px;border-radius:10px;font-size:11px}
+#splash{position:fixed;inset:0;background:#fff;display:flex;flex-direction:column;align-items:center;justify-content:center;z-index:999;animation:splashHide .5s ease 2.5s forwards}
+@keyframes splashHide{to{opacity:0;visibility:hidden;display:none}}
+#splash img{width:170px;animation:pulse 1.2s infinite}
+@keyframes pulse{0%,100%{transform:scale(1)}50%{transform:scale(1.07)}}
+.loader{width:190px;height:7px;background:#eee;border-radius:20px;overflow:hidden;margin-top:10px}.loader div{height:100%;width:50%;background:linear-gradient(90deg,var(--blue),var(--gold),var(--green));animation:load 1.1s infinite}
+@keyframes load{0%{margin-left:-50%}100%{margin-left:100%}}
+#aiBtn{position:fixed;right:14px;bottom:16px;width:58px;height:58px;border-radius:50%;background:linear-gradient(135deg,#2E42C2,#6A3DFF);color:#fff;border:3px solid var(--gold);z-index:100;cursor:pointer;display:flex;flex-direction:column;align-items:center;justify-content:center;line-height:1}
+#aiBtn b{font-size:16px}#aiBtn span{font-size:7px;font-weight:800;letter-spacing:1px}
+#aiBox{position:fixed;right:10px;bottom:78px;width:92%;max-width:420px;background:#fff;border-radius:16px;box-shadow:0 10px 30px #0003;z-index:101;overflow:hidden}
+.chat{height:230px;overflow:auto;padding:10px;font-size:13px}.msg{background:#EEF1FF;padding:8px;border-radius:12px;margin:6px 0}.msg.me{background:#E8F5E9;text-align:right}
+.hidden{display:none}
+#drawerOverlay{position:fixed;inset:0;background:rgba(0,0,0,.45);z-index:200;display:none}
+#drawerOverlay.open{display:block}
+#drawer{position:fixed;left:0;top:0;bottom:0;width:82%;max-width:330px;background:#fff;z-index:201;transform:translateX(-100%);transition:transform .28s ease;overflow-y:auto;box-shadow:10px 0 30px rgba(0,0,0,.25);border-radius:0 16px 16px 0}
+#drawer.open{transform:translateX(0)}
+.drawerHead{background:linear-gradient(135deg,#2E42C2,#2A39A8);color:#fff;padding:16px 14px;display:flex;gap:10px;align-items:center}
+.drawerHead img{width:48px;height:48px;background:#fff;border-radius:50%;object-fit:contain}
+.drawerItem{display:flex;align-items:center;gap:10px;padding:13px 14px;border-bottom:1px solid #eee;cursor:pointer;font-size:13px;font-weight:600;color:#222}
+.drawerItem:active{background:#EEF1FF}
+.drawerItem .dIc{width:32px;height:32px;border-radius:9px;background:#EEF1FF;display:flex;align-items:center;justify-content:center;font-size:16px;flex-shrink:0}
+.drawerItem small{display:block;font-weight:400;color:#777;font-size:11px}
+.drawerLabel{font-size:11px;font-weight:800;letter-spacing:1px;color:#888;padding:12px 14px 4px}
+.devCard{margin:12px;background:linear-gradient(135deg,#FFF8E1,#FFF3CD);border:1.5px solid var(--gold);border-radius:14px;padding:12px;cursor:pointer}
+#devFlyer{position:fixed;inset:0;z-index:300;background:#fff;overflow-y:auto;display:none}
+#devFlyer.open{display:block}
+.flyerTop{background:linear-gradient(180deg,#0B5ED7,#0A4AB5);color:#fff;text-align:center;padding:18px 14px 14px;position:relative}
+.flyerTop h1{font-size:30px;line-height:.95;margin:0;font-weight:900}
+.flyerTop p{color:#FFE45C;font-weight:800;font-size:13px;margin:8px 0 0}
+.flyerBody{padding:14px}
+.bizGrid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin:12px 0}
+.biz{background:#F8F9FF;border:1px solid #E6E9FF;border-radius:12px;padding:10px;font-size:12px;font-weight:700}
+.biz small{display:block;font-weight:400;color:#555;font-size:11px;margin-top:3px}
+.flyerContact{background:#0B5ED7;color:#fff;border-radius:14px;padding:14px;text-align:center;margin-top:12px}
+.flyerContact h3{margin:0 0 6px;color:#FFE45C}
+</style>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
+</head>
+<body>
+<div id="splash"><img src="logo.png"><h2 style="color:var(--blue);text-align:center;margin:8px 0 2px;font-size:20px">SALAAMA MUSLIM JUNIOR SCHOOL</h2><b style="color:var(--green);font-size:13px">DESTINED TO SUCCEED</b><div class="loader"><div></div></div><p style="font-size:11px;color:#888">Loading...</p></div>
+<script>setTimeout(function(){var s=document.getElementById('splash');if(s)s.style.display='none';},2600);</script>
+
+<div id="drawerOverlay" onclick="closeDrawer()"></div>
+<div id="drawer">
+<div class="drawerHead"><img src="logo.png"><div><b id="drawerName">User</b><br><span id="drawerRole" style="font-size:11px;color:#FFE9A8">Role</span><br><span style="font-size:10px;opacity:.9">SALAAMA MUSLIM JUNIOR SCHOOL</span></div><button onclick="closeDrawer()" style="margin-left:auto;background:rgba(255,255,255,.2);border:none;color:#fff;width:30px;height:30px;border-radius:50%;font-weight:bold">X</button></div>
+<div class="drawerLabel">CURRENT DASHBOARD - <span id="drawerRole2">Admin</span></div>
+<div id="drawerItems"></div>
+<div class="drawerLabel">ROLES</div>
+<div class="drawerItem" onclick="closeDrawer();goRoles()"><span class="dIc">⇄</span><span>Back to Roles List<small>To enter another role, go to Roles List</small></span></div>
+<div class="drawerLabel">APP DEVELOPER</div>
+<div class="devCard" onclick="closeDrawer();openDevFlyer()">
+<div style="font-size:11px;font-weight:800;color:#B77900;letter-spacing:1px">APP DEVELOPER • TAP TO VIEW</div>
+<b style="font-size:15px">Jemba AbdulHamiid</b>
+<p style="font-size:12px;margin:4px 0">We Build Websites, Software & Mobile Apps</p>
+<p style="font-size:12px;font-weight:700;margin:4px 0">WhatsApp: 0709157254 • Call: 0785831666</p>
+<div style="background:var(--green);color:#fff;text-align:center;padding:8px;border-radius:20px;font-weight:800;font-size:12px;margin-top:6px">About Developer →</div>
+</div>
+<div class="drawerItem" onclick="closeDrawer();logout()"><span class="dIc">↪</span><span>Logout<small>Sign out</small></span></div>
+</div>
+
+<div id="devFlyer">
+<div class="flyerTop"><button onclick="closeDevFlyer()" style="position:absolute;left:10px;top:10px;background:#fff;border:none;width:34px;height:34px;border-radius:50%;font-weight:900">←</button>
+<h1>DO YOU NEED<br>AN APP FOR<br>YOUR BUSINESS?</h1><p>Your Business On Every Phone = More<br>Customers + More Money!</p></div>
+<div class="flyerBody">
+<div class="bizGrid">
+<div class="biz">🏦 SACCO<small>Savings, Loans, Members, Reports</small></div>
+<div class="biz">🏫 School<small>Students, Fees, Results, Attendance</small></div>
+<div class="biz">💊 Pharmacy<small>Stock, Expiry Alert, Sales</small></div>
+<div class="biz">🕌 Mosque<small>Members, Donations, Events</small></div>
+<div class="biz">🏥 Clinic<small>Patients, Appointments, Records</small></div>
+<div class="biz">🏠 Real Estate<small>Houses, Tenants, Rent</small></div>
+<div class="biz">🍽️ Restaurant<small>Menu, Orders, Booking</small></div>
+<div class="biz">🛒 Shop<small>Stock, Sales, Receipts, Debtors</small></div>
+</div>
+<div class="flyerContact"><h3>CONTACT YOUR APP DEVELOPER TODAY</h3><p><b>Developer: Jemba AbdulHamiid</b></p><p>📱 WhatsApp: 0709157254</p><p>📞 Call: 0785831666</p><p>📧 ustadhnze@gmail.com</p>
+<button class="btn btn-green" style="background:#25D366" onclick="window.open('https://wa.me/256709157254?text=Assalamu Alaikum Developer, I want an App for my business','_blank')">Chat on WhatsApp</button>
+<button class="btn" style="background:#fff;color:#0B5ED7" onclick="window.open('tel:+256785831666')">Call Now</button>
+<div style="background:#8BC34A;color:#12300A;border-radius:20px;padding:10px;font-weight:900;margin-top:10px">Call Now For a FREE Demo!</div></div>
+<button class="btn" onclick="closeDevFlyer()">← Back to App</button>
+</div></div>
+
+<div id="scr-unlock" class="screen"><div class="wrap" style="text-align:center;padding-top:50px">
+<img src="logo.png" style="width:110px"><h2 style="color:var(--blue)">Welcome Back</h2>
+<div class="card"><div style="font-size:48px">🔓</div><b id="unlockName">User</b><br><span id="unlockEmail" style="font-size:12px;color:#666"></span></div>
+<button class="btn btn-green" onclick="unlockWithPhoneLock()">🔓 Unlock with Phone Lock</button>
+<button class="btn" onclick="show('scr-login')">Use Password Instead</button>
+<button class="btn btn-gold" onclick="disablePhoneLock()">Turn OFF Phone Lock</button>
+<p id="unlockMsg" style="font-size:12px;color:red"></p></div></div>
+
+<div id="scr-login" class="screen"><div class="wrap" style="padding-top:24px;text-align:center">
+<img src="logo.png" style="width:140px"><h2 style="color:var(--blue);margin:8px 0 0;font-size:18px">SALAAMA MUSLIM JUNIOR SCHOOL</h2><p style="color:var(--green);font-weight:bold;margin:4px;font-size:12px">Destined To Succeed</p>
+<div id="fbStatus" class="firebaseBar off" style="background:#FFF3E0;border:1px solid #FF9800;padding:6px 8px;border-radius:10px;font-size:11px;margin-bottom:8px">🟠 Firebase: Not connected</div>
+<div class="card" style="text-align:left"><h3>Login / Sign Up</h3>
+<input id="f-name" placeholder="Full Name" autocomplete="name">
+<input id="f-email" placeholder="Email" autocomplete="email">
+<div class="passWrap"><input type="password" id="f-pass" placeholder="Password" autocomplete="current-password"><button type="button" class="eyeBtn" id="eyeBtn" onclick="togglePass()">SHOW</button></div>
+<label style="font-size:12px;display:flex;gap:6px;align-items:center;margin-top:10px"><input type="checkbox" id="f-remember" checked style="width:auto;margin:0"> Keep me signed in + Enable Phone Lock</label>
+<button class="btn" id="loginBtn" onclick="firebaseLogin()">Login</button>
+<button class="btn btn-gold" id="signupBtn" onclick="firebaseSignup()">Create Account</button>
+<button class="btn" id="forgotBtn" style="background:#fff;color:var(--blue);border:1px solid var(--blue);padding:10px" onclick="forgotPassword()">Forgot Password?</button>
+<button class="btn" style="background:#fff;color:#2E42C2;border:1px solid #2E42C2" onclick="location.reload()">Retry Connection</button>
+<button id="installBtn" class="btn btn-green" style="display:none" onclick="installApp()">Install App</button>
+<p id="loginMsg" style="font-size:12px;color:#E53935;min-height:16px"></p></div>
+</div></div>
+
+<div id="scr-role" class="screen"><div class="topbar"><button class="back" onclick="show('scr-login')">⬅ Back</button><img src="logo.png"><div><b>SALAAMA MUSLIM JUNIOR SCHOOL</b><br><span>Destined To Succeed</span></div></div>
+<div class="wrap"><h3 style="color:var(--blue)">Welcome, <span id="roleUserName">User</span></h3><div id="roleList"></div>
+<button class="btn btn-green" onclick="confirmRoles()">Continue to Dashboard</button>
+<button class="btn btn-gold" onclick="saveRolesToFirebase()">Save My Roles</button>
+<button class="btn" onclick="show('scr-login')">Back to Login</button></div></div>
+
+<div id="scr-dash" class="screen"><div class="topbar"><button class="hamburger" onclick="openDrawer()"><span></span><span></span><span></span></button><img src="logo.png"><div><b>SALAAMA</b><br><span id="curRoleName">Admin</span></div><button class="back" style="margin-left:auto" onclick="logout()">Logout</button></div>
+<div class="wrap">
+<div class="card"><b><span id="dashUserName">User</span> - <span id="dashRoleLabel">Admin</span></b></div>
+<div id="dashStats" class="statGrid"></div>
+<div id="dashGrid" class="grid"></div>
+<div class="card"><h3>Live Data</h3><p id="liveData">Loading...</p><button class="btn btn-green" onclick="loadLiveStudents()">Refresh</button></div>
+<button class="btn btn-gold" onclick="goRoles()">← Back to Roles List</button>
+</div></div>
+
+<div id="scr-detail" class="screen"><div class="topbar"><button class="hamburger" onclick="openDrawer()"><span></span><span></span><span></span></button><button class="back" onclick="goDash()">⬅ Back</button><img src="logo.png"><div><b id="detailTitle">Screen</b></div></div>
+<div class="wrap"><div id="detailBody"></div><button class="btn btn-gold" onclick="goDash()">Back to Dashboard</button><button class="btn" onclick="goRoles()">← Back to Roles List</button></div></div>
+
+<div id="scr-wait" class="screen"><div class="wrap" style="text-align:center;padding-top:40px"><img src="logo.png" style="width:110px"><h2 style="color:var(--blue)">Waiting for Approval</h2><p id="waitRoles" style="font-size:12px;color:#555"></p><div id="waitRoleList"></div><button class="btn btn-green" onclick="checkApproval()">Check Approval</button><button class="btn" onclick="show('scr-login')">Back to Login</button></div></div>
+
+<button id="aiBtn" onclick="toggleAI()"><b>✦ AI</b><span>SALAAMA</span></button>
+<div id="aiBox" class="hidden"><div class="topbar"><b>✦ Salaama AI - Real Data</b></div><div class="chat" id="chatBox"><div class="msg">Assalamu Alaikum! Ask me about your real data.</div></div><div style="padding:10px;display:flex;gap:6px"><input id="aiInput" placeholder="Ask Salaama AI..."><button class="btn" style="width:70px;margin:0" onclick="askAI()">Send</button></div></div>
+
+<script>
+const firebaseConfig={apiKey:"AIzaSyAfWFv0ttajIf_gJ4N9kgYU_dvn0UqcsG0",authDomain:"salaama-school.firebaseapp.com",projectId:"salaama-school",storageBucket:"salaama-school.firebasestorage.app",messagingSenderId:"624538718062",appId:"1:624538718062:web:fb5ef3f413b02d74c33b7f"};
+const DEV_EMAIL="ustadhnze@gmail.com",DEV_NAME="Jemba AbdulHamiid";
+const ALL_ROLES=['admin','headteacher','bursar','tahfiizu','dos_sec','dos_theo','teacher_sec','teacher_theo','other','parent'];
+const SCHOOL_ADMIN_ROLES=['admin','headteacher','bursar','parent'];
+const COLLECTIONS=['users','students','staff','fees','attendance','results','notices','tahfiizu','classes'];
+let auth=null,db=null,firebaseReady=false,currentUid=null,cur='admin',userName='User',selected=[],approvedRoles=[],authHandled=false,isDeveloper=false;
+function isDevEmail(e){return (e||'').toLowerCase().trim()===DEV_EMAIL}
+function setMsg(t,c){let m=document.getElementById('loginMsg');if(!m)return;m.style.color=c||'#E53935';m.innerText=t}
+function setBusy(b,id,l){let x=document.getElementById(id);if(x){x.disabled=b;x.innerText=b?'Please wait...':l}}
+function togglePass(){let p=document.getElementById('f-pass'),b=document.getElementById('eyeBtn');if(!p||!b)return;if(p.type==='password'){p.type='text';b.innerText='HIDE'}else{p.type='password';b.innerText='SHOW'}p.focus()}
+function show(id){closeDrawer();document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));document.getElementById(id).classList.add('active');window.scrollTo(0,0)}
+function goDash(){show('scr-dash')}
+function goRoles(){renderRoleList();show('scr-role')}
+function phoneLockEnabled(){try{return localStorage.getItem('salaama_phone_lock')==='1'&&!!localStorage.getItem('salaama_saved_email')}catch(e){return false}}
+function enablePhoneLock(email,name){try{localStorage.setItem('salaama_phone_lock','1');localStorage.setItem('salaama_saved_email',email||'');localStorage.setItem('salaama_saved_name',name||'')}catch(e){}}
+function disablePhoneLock(){try{localStorage.removeItem('salaama_phone_lock');localStorage.removeItem('salaama_webauthn_id')}catch(e){}alert('Phone Lock OFF');show('scr-login')}
+function bufToB64(buf){let s='';let b=new Uint8Array(buf);for(let i=0;i<b.length;i++)s+=String.fromCharCode(b[i]);return btoa(s)}
+function b64ToBuf(s){let bin=atob(s);let b=new Uint8Array(bin.length);for(let i=0;i<bin.length;i++)b[i]=bin.charCodeAt(i);return b.buffer}
+async function setupPhoneLock(email){try{if(!window.PublicKeyCredential||!window.isSecureContext)return false;let ch=new Uint8Array(32);crypto.getRandomValues(ch);let cred=await navigator.credentials.create({publicKey:{challenge:ch,rp:{name:'Salaama School',id:location.hostname},user:{id:new TextEncoder().encode(email),name:email,displayName:email},pubKeyCredParams:[{alg:-7,type:'public-key'},{alg:-257,type:'public-key'}],authenticatorSelection:{authenticatorAttachment:'platform',userVerification:'required'},timeout:60000,attestation:'none'}});if(cred){try{localStorage.setItem('salaama_webauthn_id',bufToB64(cred.rawId))}catch(e){}return true}}catch(e){}return false}
+async function unlockWithPhoneLock(){let m=document.getElementById('unlockMsg');if(m)m.innerText='Waiting for Fingerprint / Face / PIN...';try{let webId=null;try{webId=localStorage.getItem('salaama_webauthn_id')}catch(e){}if(window.PublicKeyCredential&&webId){try{let ch=new Uint8Array(32);crypto.getRandomValues(ch);await navigator.credentials.get({publicKey:{challenge:ch,allowCredentials:[{id:b64ToBuf(webId),type:'public-key',transports:['internal']}],userVerification:'required',timeout:60000}})}catch(e){}}}catch(e){}let em='';try{em=localStorage.getItem('salaama_saved_email')||''}catch(e){}if(em)document.getElementById('f-email').value=em;if(auth&&auth.currentUser){authHandled=true;await handleAfterAuth(auth.currentUser.email);return}if(m)m.innerText='Session expired. Login with password once.';setTimeout(()=>show('scr-login'),800)}
+// AUTO CREATE COLLECTIONS
+async function ensureCollections(){if(!db)return;for(let c of COLLECTIONS){try{let s=await db.collection(c).limit(1).get();if(s.empty){await db.collection(c).doc('_init').set({_init:true,createdAt:new Date()});}}catch(e){}}}
+async function ensureUserDoc(uid,email,name){
+  let ref=db.collection('users').doc(uid);let doc=await ref.get();let isDev=isDevEmail(email);
+  if(!doc.exists){
+    // Developer first time: ALL roles so he can approve first Admin. After Admin exists, he works with 4 roles.
+    let hasAdmin=false;try{let s=await db.collection('users').where('approved','==',true).get();s.forEach(d=>{let x=d.data();if(x.approvedRoles&&x.approvedRoles.includes('admin')&&!isDevEmail(x.email))hasAdmin=true})}catch(e){}
+    let roles=isDev?(hasAdmin?SCHOOL_ADMIN_ROLES:ALL_ROLES):[];
+    let d={name:isDev?DEV_NAME:(name||email.split('@')[0]),email,roles,approvedRoles:roles,approved:isDev?true:false,isDeveloper:isDev,isSchoolAdmin:false,status:isDev?'approved':'pending',createdAt:new Date()};
+    await ref.set(d);return d;
+  }
+  let d=doc.data();
+  if(isDev&&d.isDeveloper!==true){try{await ref.update({isDeveloper:true,approved:true,status:'approved',roles:ALL_ROLES,approvedRoles:ALL_ROLES})}catch(e){}d={...d,isDeveloper:true,approved:true,roles:ALL_ROLES,approvedRoles:ALL_ROLES}}
+  return d;
+}
+async function handleAfterAuth(email){
+  if(!auth.currentUser)return;currentUid=auth.currentUser.uid;await ensureCollections();
+  localStorage.setItem('salaama_email',email);localStorage.setItem('salaama_uid',currentUid);
+  let nameInput=document.getElementById('f-name').value.trim();
+  let d=await ensureUserDoc(currentUid,email,nameInput);userName=d.name||email;isDeveloper=(d.isDeveloper===true||isDevEmail(email));
+  document.getElementById('roleUserName').innerText=userName;setMsg('','#2E9E4F');
+  if(document.getElementById('f-remember')&&document.getElementById('f-remember').checked){enablePhoneLock(email,userName);setupPhoneLock(email)}
+  if(isDeveloper){
+    // Developer: if a School Admin already approved, Developer works with 4 roles only. Else ALL roles to approve first Admin.
+    let hasAdmin=false;try{let s=await db.collection('users').where('approved','==',true).get();s.forEach(x=>{let v=x.data();if(v.approvedRoles&&v.approvedRoles.includes('admin')&&!isDevEmail(v.email))hasAdmin=true})}catch(e){}
+    approvedRoles=hasAdmin?SCHOOL_ADMIN_ROLES:(d.approvedRoles&&d.approvedRoles.length?d.approvedRoles:ALL_ROLES);
+    // Keep Developer Tools visible: Developer can still approve via Admin dashboard + Developer Tools card
+    selected=[...approvedRoles];renderRoleList();show('scr-role');return;
+  }
+  if(d.approved!==true){selected=d.roles||[];approvedRoles=[];document.getElementById('waitRoles').innerText='You selected: '+(selected.join(', ')||'none')+' - Waiting Admin';show('scr-wait');renderRoleList();return;}
+  approvedRoles=d.approvedRoles||d.roles||[];selected=[...approvedRoles];renderRoleList();show('scr-role');
+}
+try{if(typeof firebase!=='undefined'){firebase.initializeApp(firebaseConfig);auth=firebase.auth();db=firebase.firestore();firebaseReady=true;let s=document.getElementById('fbStatus');if(s){s.style.background='#E8F5E9';s.style.borderColor='#2E9E4F';s.innerText='Firebase: CONNECTED - LIVE Mode.'}auth.onAuthStateChanged(async(u)=>{if(u&&!authHandled){authHandled=true;currentUid=u.uid;await handleAfterAuth(u.email)}else if(!u){authHandled=false}})}}catch(e){setMsg('Firebase failed: '+e.message)}
+async function firebaseSignup(){let email=document.getElementById('f-email').value.trim().toLowerCase(),pass=document.getElementById('f-pass').value,name=document.getElementById('f-name').value.trim();if(!name){setMsg('Enter Full Name first');return}if(!email||!pass){setMsg('Enter Email and Password');return}if(pass.length<6){setMsg('Password must be 6+');return}if(!firebaseReady){setMsg('Firebase not connected');return}setBusy(true,'signupBtn','');setMsg('Creating account...','#2E42C2');try{authHandled=false;await auth.createUserWithEmailAndPassword(email,pass);authHandled=true;await handleAfterAuth(email)}catch(e){if(e.code==='auth/email-already-in-use'){setMsg('Account exists. Logging you in...','#2E9E4F');try{authHandled=false;await auth.signInWithEmailAndPassword(email,pass);authHandled=true;await handleAfterAuth(email)}catch(e2){setMsg('Password wrong. Press Forgot Password.')}}else setMsg(e.message)}finally{setBusy(false,'signupBtn','Create Account')}}
+async function firebaseLogin(){let email=document.getElementById('f-email').value.trim().toLowerCase(),pass=document.getElementById('f-pass').value;if(!email||!pass){setMsg('Enter Email and Password');return}if(!firebaseReady){setMsg('Firebase not connected');return}authHandled=false;setBusy(true,'loginBtn','');setMsg('Logging in... Please wait','#2E42C2');try{if(auth.currentUser&&auth.currentUser.email&&auth.currentUser.email.toLowerCase()===email){authHandled=true;await handleAfterAuth(email);return}await auth.signInWithEmailAndPassword(email,pass);authHandled=true;await handleAfterAuth(email)}catch(e){if(e.code==='auth/invalid-credential'||e.code==='auth/wrong-password'||e.code==='auth/user-not-found')setMsg('Wrong password OR no account. If new, press Create. If old, press Forgot Password.');else if(e.code==='auth/too-many-requests')setMsg('Too many tries. Wait 1 minute.');else setMsg(e.message)}finally{setBusy(false,'loginBtn','Login')}}
+async function forgotPassword(){let email=document.getElementById('f-email').value.trim().toLowerCase();if(!email){setMsg('Enter Email first');return}try{await auth.sendPasswordResetEmail(email);setMsg('Reset link sent to '+email,'#2E9E4F');alert('Reset link sent. Check Gmail / Spam.')}catch(e){setMsg(e.message)}}
+async function checkApproval(){if(!currentUid&&auth.currentUser)currentUid=auth.currentUser.uid;if(!currentUid){show('scr-login');return}let doc=await db.collection('users').doc(currentUid).get();let d=doc.data();if(d.approved===true){approvedRoles=d.approvedRoles||d.roles||[];selected=[...approvedRoles];alert('Approved.');renderRoleList();show('scr-role')}else alert('Still pending. Admin has not approved yet.')}
+function openDrawer(){let R=ROLES.find(x=>x.id===cur);document.getElementById('drawerName').innerText=userName;document.getElementById('drawerRole').innerText=R?R.name:cur;document.getElementById('drawerRole2').innerText=R?R.name:cur;let items=getDash();document.getElementById('drawerItems').innerHTML=items.map(i=>`<div class="drawerItem" onclick="closeDrawer();openScreen('${i[1]}')"><span class="dIc">${i[0]}</span><span>${i[1]}<small>${i[2]}</small></span><span style="margin-left:auto;color:#999">›</span></div>`).join('');document.getElementById('drawer').classList.add('open');document.getElementById('drawerOverlay').classList.add('open')}
+function closeDrawer(){document.getElementById('drawer').classList.remove('open');document.getElementById('drawerOverlay').classList.remove('open')}
+function openDevFlyer(){document.getElementById('devFlyer').classList.add('open');window.scrollTo(0,0)}
+function closeDevFlyer(){document.getElementById('devFlyer').classList.remove('open')}
+const ROLES=[
+{id:'admin',name:'Admin',icon:'👑',desc:'Manages whole system.',func:'Approve users • Staff • Students • Finance'},
+{id:'headteacher',name:'Headteacher',icon:'🎓',desc:'Manages academics.',func:'Teachers • Classes • Exams • Attendance'},
+{id:'bursar',name:'Bursar',icon:'💰',desc:'Manages money.',func:'Collect Fees • Receipts • Reports'},
+{id:'tahfiizu',name:'Tahfiizu Sheikh',icon:'📖',desc:'Quran memorization.',func:'Students • Attendance • Hifzu'},
+{id:'dos_sec',name:'D.O.S Secular',icon:'📚',desc:'Secular academics.',func:'Attendance • Performance • Exams'},
+{id:'dos_theo',name:'D.O.S Theology',icon:'🕌',desc:'Theology academics.',func:'Attendance • Performance • Exams'},
+{id:'teacher_sec',name:'Secular Teacher',icon:'✏️',desc:'Teaches secular.',func:'My Classes • Exams • Marks'},
+{id:'teacher_theo',name:'Theology Teacher',icon:'📿',desc:'Teaches Quran, Arabic, Islamic Studies.',func:'My Classes • Exams • Marks'},
+{id:'other',name:'Other Workers',icon:'🍲',desc:'Non-teaching staff.',func:'My Attendance'},
+{id:'parent',name:'Parent',icon:'👨‍👩‍👧',desc:'Views ONLY own child.',func:'Child • Fees • Attendance • Results'}
+];
+function getDash(){
+if(cur==='admin')return [['👥','Staff Management','Approve users, salary'],['🧒','Students Management','Register, fees'],['🏫','Classes','All classes'],['✅','Attendance','Students + Teachers'],['📄','Documents','Receipts, reports'],['📖','Tahfiizu','Hifzu, Darsu Sitta'],['💰','Finance','Income, balance, expense'],['🎬','Media','Videos & Audios'],['⚙️','Settings','Term, fees'],['🛠','Developer Tools','Approve Admin']];
+if(cur==='bursar')return [['💰','Collect Fees','Collect & record'],['🧾','Generate Receipt','Receipt'],['🧒','Students & Fee Status','Who paid / balance'],['📊','Reports','Daily / Monthly'],['📈','Cashflow','Income / Expense'],['📄','Documents','Saved receipts']];
+if(cur==='headteacher')return [['👨‍🏫','Teacher Management','List & responsibilities'],['🏫','Classes','List + learners'],['📝','Exams Approval','Approve exams'],['✅','Attendance','Children + Teachers'],['💰','Fees Status','View fees'],['🗓️','Timetable','From DOSs']];
+if(cur==='dos_sec')return [['✅','Secular Attendance','Attendance'],['📈','Children Performance','Marks'],['👨‍🏫','Teachers Performance','Give marks'],['📚','Secular Curriculum','Topics, schemes'],['📝','Exams Approval','Approve exams']];
+if(cur==='dos_theo')return [['✅','Theology Attendance','Attendance'],['📈','Children Performance','Marks'],['👨‍🏫','Teachers Performance','Give marks'],['🕌','Theology Curriculum','Topics, schemes'],['📝','Exams Approval','Approve exams']];
+if(cur==='teacher_sec')return [['🏫','My Classes','My classes'],['📝','Set Exams','Submit to DOS'],['📚','Lesson Plans','Create'],['🗓️','Timetable','Create'],['✅','Mark Attendance','Mark class'],['✍️','Record Marks','Auto total']];
+if(cur==='teacher_theo')return [['🏫','My Classes','My classes'],['📝','Set Exams','Submit to DOS'],['📚','Lesson Plans','Create'],['🗓️','Timetable','Create'],['✅','Mark Attendance','Mark'],['✍️','Record Marks','Enter marks']];
+if(cur==='tahfiizu')return [['🧒','Students List','Tahfiizu students'],['✅','Attendance','Daily'],['📖','Quran Presentation','Hifzu, Darsu Sitta'],['📊','Tahfiizu Reports','Daily / Weekly'],['🏆','Hifzu Certificate','Generate']];
+if(cur==='other')return [['✅','My Attendance','Mark my own only'],['💬','Chat Headteacher','Chat']];
+if(cur==='parent')return [['🧒','My Child Profile','Only my children'],['💰','Fees Status','Only my children'],['✅','Attendance','Only my children'],['📊','Results','Only my children'],['🗓️','Timetable','Only my children'],['💬','Chat / Notices','From Admin'],['📖','Tahfiizu Progress','If Tahfiizu']];
+return [];
+}
+function renderRoleList(){
+document.getElementById('roleList').innerHTML=ROLES.map(r=>{
+let isSel=selected.includes(r.id);let isApp=approvedRoles.includes(r.id);let cls=isApp?'approved':(isSel?'pending':'');
+let badge=isApp?'<span class="badge-green">APPROVED - Tap to Enter</span>':(isSel?'<span class="badge-orange">PENDING - Waiting Admin</span>':'<span class="badge-grey">Tap to Select</span>');
+// Developer sees Developer Tools note on Admin card
+return `<div class="roleCard ${cls}" onclick="toggleRoleCard('${r.id}')"><div style="font-size:32px">${r.icon}</div><b>${r.name}</b><p>${r.desc}</p><p><b>Functions:</b> ${r.func}</p>${badge}</div>`;
+}).join('');
+let waitEl=document.getElementById('waitRoleList');if(waitEl)waitEl.innerHTML=ROLES.filter(r=>selected.includes(r.id)).map(r=>`<div style="background:#FFF3E0;border:1px solid #FF9800;padding:8px;border-radius:10px;margin:6px 0">🟠 ${r.name} - Pending</div>`).join('')||'No roles selected yet';
+}
+function toggleRoleCard(id){
+// RULE: If GREEN approved, tapping ENTERS that Dashboard. If not approved, it only selects for approval. No direct switching elsewhere.
+if(approvedRoles.includes(id)){cur=id;switchRole(id);show('scr-dash');loadDashboard();return}
+if(selected.includes(id)){selected=selected.filter(x=>x!==id);renderRoleList();return}
+// Max rules: Normal 1-3, Admin/Developer 4
+let isAdminPick=(id==='admin'||selected.includes('admin')||isDeveloper);let maxRoles=isAdminPick?4:3;
+if(selected.length>=maxRoles){alert(isAdminPick?'Admin can select max 4 roles':'You can select max 3 roles. Admin can select 4.');return}
+selected.push(id);if(id==='admin')alert('Admin selected. You can also select Headteacher, Bursar, Parent - Total 4.');renderRoleList();
+}
+function confirmRoles(){
+if(selected.length===0){alert('Select at least 1 role');return}
+if(approvedRoles.length===0){alert('Not approved yet. Save your roles first.');return}
+let toEnter=selected.find(r=>approvedRoles.includes(r))||approvedRoles[0];cur=toEnter;switchRole(cur);show('scr-dash');loadDashboard();
+}
+async function switchRole(r){
+// RULE: switchRole is ONLY called from Role List. No other screen can call it to jump roles.
+if(approvedRoles.length>0&&!approvedRoles.includes(r)){alert('Not approved yet.');return}
+cur=r;let R=ROLES.find(x=>x.id==r);if(!R)return;
+if(firebaseReady&&currentUid){db.collection('users').doc(currentUid).update({lastRole:r}).catch(()=>{})}
+document.getElementById('curRoleName').innerText=R.name;document.getElementById('dashRoleLabel').innerText=R.name;document.getElementById('dashUserName').innerText=userName;document.querySelectorAll('.dashUserName2').forEach(e=>e.innerText=userName);
+let items=getDash();document.getElementById('dashGrid').innerHTML=items.map(i=>`<div class="tile" onclick="openScreen('${i[1]}')"><div class="ic">${i[0]}</div><b>${i[1]}</b><span>${i[2]}</span></div>`).join('');
+}
+async function loadDashboard(){
+try{
+let sSnap=await db.collection('students').get();let fSnap=await db.collection('fees').get();let collected=0;fSnap.forEach(d=>collected+=Number(d.data().amount||0));
+let aSnap=await db.collection('attendance').where('date','==',new Date().toDateString()).get();
+if(cur==='parent'){let my=await db.collection('students').where('parentId','==',currentUid).get();let bal=0;my.forEach(d=>bal+=Number(d.data().fees||0)-Number(d.data().paid||0));document.getElementById('dashStats').innerHTML=`<div class="stat"><b>${my.size}</b><span>My Children</span></div><div class="stat"><b>${bal.toLocaleString()}</b><span>My Balance</span></div><div class="stat"><b>${aSnap.size}</b><span>Present Today</span></div>`}
+else{document.getElementById('dashStats').innerHTML=`<div class="stat"><b>${sSnap.size}</b><span>Students</span></div><div class="stat"><b>${collected.toLocaleString()}</b><span>Collected</span></div><div class="stat"><b>${aSnap.size}</b><span>Present Today</span></div>`}
+await loadLiveStudents();
+}catch(e){document.getElementById('liveData').innerText='Error: '+e.message}
+}
+async function loadLiveStudents(){
+let el=document.getElementById('liveData');if(!firebaseReady){el.innerText='Firebase not connected';return}
+try{let snap;if(cur==='parent'&&currentUid)snap=await db.collection('students').where('parentId','==',currentUid).get();else snap=await db.collection('students').limit(20).get();if(snap.empty){el.innerHTML='No students yet.';return}let html='';snap.forEach(d=>{let s=d.data();if(s._init)return;html+=`🧒 ${s.name||'-'} - ${s.cls||''} - Fees ${s.fees||''} - Paid ${s.paid||''} - Balance ${(s.fees||0)-(s.paid||0)}<br>`});el.innerHTML=html||'No students yet.'}catch(e){el.innerText='Error: '+e.message}
+}
+async function loadPendingUsers(){let el=document.getElementById('pendingList');if(!el)return;try{let snap=await db.collection('users').where('approved','==',false).get();if(snap.empty){el.innerHTML='No pending users.';return}let html='';snap.forEach(doc=>{let u=doc.data();if(isDevEmail(u.email))return;html+=`<div style="border:1px solid #FF9800;border-radius:10px;padding:8px;margin:6px 0;background:#FFF3E0"><b>${u.name||u.email}</b><br>${u.email}<br>Requested: ${(u.roles||[]).join(', ')}<br><button class="btn btn-green" style="width:auto;padding:8px 12px" onclick="approveUser('${doc.id}')">Approve</button> <button class="btn btn-red" style="width:auto;padding:8px 12px" onclick="rejectUser('${doc.id}')">Reject</button></div>`});el.innerHTML=html||'No pending users.'}catch(e){el.innerHTML='Error: '+e.message}}
+async function approveUser(uid){try{let doc=await db.collection('users').doc(uid).get();let roles=doc.data().roles||[];let isAdmin=roles.includes('admin');let finalRoles=isAdmin?SCHOOL_ADMIN_ROLES:roles;await db.collection('users').doc(uid).update({approved:true,approvedRoles:finalRoles,isSchoolAdmin:isAdmin,status:'approved'});alert('Approved.');loadPendingUsers()}catch(e){alert(e.message)}}
+async function rejectUser(uid){if(!confirm('Reject this user?'))return;await db.collection('users').doc(uid).update({approved:false,approvedRoles:[],status:'rejected',roles:[]});alert('Rejected');loadPendingUsers()}
+async function makeSchoolAdmin(){let em=document.getElementById('mk-admin-email').value.trim().toLowerCase();if(!em){alert('Enter Email');return}let s=await db.collection('users').where('email','==',em).get();if(s.empty){alert('That person must Create Account first with that email.');return}s.forEach(async d=>{await db.collection('users').doc(d.id).update({approved:true,approvedRoles:SCHOOL_ADMIN_ROLES,roles:SCHOOL_ADMIN_ROLES,isSchoolAdmin:true,status:'approved'});alert('Made School Admin - 4 Roles: Admin, Headteacher, Bursar, Parent');listAllUsers()})}
+async function listAllUsers(){try{let s=await db.collection('users').get();let h='';s.forEach(d=>{let x=d.data();if(x._init)return;h+=`<div class="card"><b>${x.name}</b><br>${x.email}<br>Roles: ${(x.approvedRoles||[]).join(', ')}<br>${isDevEmail(x.email)?'DEVELOPER':x.isSchoolAdmin?'SCHOOL ADMIN':'User'}</div>`});document.getElementById('listBox').innerHTML=h||'No users yet.'}catch(e){document.getElementById('listBox').innerHTML='Error: '+e.message}}
+function openScreen(title){
+document.getElementById('detailTitle').innerText=title;let h=`<div class="card"><h3>${title}</h3>`;
+if(title==='Developer Tools'){h+=`<p>Developer: ${DEV_NAME}</p><input id="mk-admin-email" placeholder="School Admin Email"><button class="btn btn-green" onclick="makeSchoolAdmin()">Make School Admin (4 Roles)</button><div id="listBox"></div>`;document.getElementById('detailBody').innerHTML=h+'</div>';show('scr-detail');listAllUsers();return}
+if(title==='Students Management'){h+=`<input id="st-name" placeholder="Student Full Name"><input id="st-class" placeholder="Class e.g. P2"><input id="st-parent" placeholder="Parent Name"><input id="st-fees" type="number" placeholder="Fees Amount"><input id="st-paid" type="number" placeholder="Paid Amount"><button class="btn btn-green" onclick="saveStudent()">Register Student</button><div id="listBox"></div>`;document.getElementById('detailBody').innerHTML=h+'</div>';show('scr-detail');listStudents();return}
+if(title==='Staff Management'||title==='Teacher Management'){h+=`<div class="card"><h3>Pending Approvals</h3><div id="pendingList">Loading...</div><button class="btn btn-green" onclick="loadPendingUsers()">Refresh Pending</button></div><input id="sf-name" placeholder="Staff Full Name"><input id="sf-role" placeholder="Role"><input id="sf-salary" type="number" placeholder="Salary"><button class="btn btn-green" onclick="saveStaff()">Save Staff</button><div id="listBox"></div>`;document.getElementById('detailBody').innerHTML=h+'</div>';show('scr-detail');listStaff();loadPendingUsers();return}
+if(title==='Fees'||title==='Collect Fees'||title==='Generate Receipt'||title==='Students & Fee Status'){h+=`<input id="fee-student" placeholder="Student Name"><input id="fee-amount" type="number" placeholder="Amount Paid"><button class="btn btn-green" onclick="saveFee()">Record Payment</button><div id="listBox"></div>`;document.getElementById('detailBody').innerHTML=h+'</div>';show('scr-detail');listFees();return}
+if(title==='Attendance'||title==='Secular Attendance'||title==='Theology Attendance'||title==='Mark Attendance'||title==='My Attendance'){h+=`<input id="at-name" placeholder="Student / Staff Name"><select id="at-status"><option>Present</option><option>Absent</option></select><button class="btn btn-green" onclick="saveAttendance()">Save Attendance</button><div id="listBox"></div>`;document.getElementById('detailBody').innerHTML=h+'</div>';show('scr-detail');listAttendance();return}
+if(title==='Results'||title==='Record Marks'||title==='Children Performance'){h+=`<input id="rs-name" placeholder="Student Name"><input id="rs-eng" type="number" placeholder="English /100"><input id="rs-math" type="number" placeholder="Math /100"><input id="rs-sci" type="number" placeholder="Science /100"><button class="btn btn-green" onclick="saveResult()">Save Result</button><div id="listBox"></div>`;document.getElementById('detailBody').innerHTML=h+'</div>';show('scr-detail');listResults();return}
+if(title==='Notices'||title==='Chat / Notices'||title==='Chat Headteacher'){h+=`<textarea id="nt-text" placeholder="Write Notice..."></textarea><button class="btn btn-green" onclick="saveNotice()">Send Notice</button><div id="listBox"></div>`;document.getElementById('detailBody').innerHTML=h+'</div>';show('scr-detail');listNotices();return}
+if(title==='My Child Profile'||title==='Fees Status'||title==='Tahfiizu Progress'){h+=`<div id="listBox"></div>`;document.getElementById('detailBody').innerHTML=h+'</div>';show('scr-detail');listMyChildren();return}
+if(title==='Classes'||title==='My Classes'){h+=`<div id="listBox"></div>`;document.getElementById('detailBody').innerHTML=h+'</div>';show('scr-detail');listClasses();return}
+if(title==='Tahfiizu'||title==='Quran Presentation'){h+=`<input id="tf-name" placeholder="Student Name"><input id="tf-from" placeholder="From Surah"><input id="tf-to" placeholder="To Surah"><textarea id="tf-note" placeholder="Darsu Sitta / Omuraji'a"></textarea><button class="btn btn-green" onclick="saveTahfiizu()">Save Presentation</button><div id="listBox"></div>`;document.getElementById('detailBody').innerHTML=h+'</div>';show('scr-detail');listTahfiizu();return}
+if(title==='Finance'||title==='Cashflow'||title==='Reports'){h+=`<div id="listBox"></div>`;document.getElementById('detailBody').innerHTML=h+'</div>';show('scr-detail');listFees();return}
+if(title==='Documents'){h+=`<div id="listBox"></div>`;document.getElementById('detailBody').innerHTML=h+'</div>';show('scr-detail');listNotices();return}
+if(title==='Settings'){h+=`<div class="card" style="text-align:center"><b>Jemba AbdulHamiid</b><p>WhatsApp: 0709157254 • Call: 0785831666</p><button class="btn btn-gold" onclick="openDevFlyer()">About Developer</button></div><label>Term Begins<input type="date"></label><label>Term Ends<input type="date"></label><input placeholder="Fees Baby"><input placeholder="Fees P1-P7"><button class="btn" onclick="alert('Saved')">Save Settings</button>`;}
+else if(title==='Media'){h+=`<p>No media yet.</p>`;}
+else if(title==='Timetable'){h+=`<div id="listBox"></div>`;document.getElementById('detailBody').innerHTML=h+'</div>';show('scr-detail');listTimetable();return;}
+else if(title==='Hifzu Certificate'){h+=`<input placeholder="Student Name"><input placeholder="Juz"><button class="btn btn-gold" onclick="alert('Generated')">Generate Certificate</button>`;}
+else if(title==='Exams Approval'||title==='Set Exams'){h+=`<input placeholder="Class"><input placeholder="Subject"><input placeholder="Topic"><button class="btn btn-green" onclick="alert('Approved')">Approve</button><button class="btn btn-red" onclick="alert('Rejected')">Reject</button>`;}
+else if(title==='Lesson Plans'||title==='Secular Curriculum'||title==='Theology Curriculum'){h+=`<input placeholder="Class"><input placeholder="Subject"><input placeholder="Topic"><textarea placeholder="Lesson Plan..."></textarea><button class="btn" onclick="alert('Saved')">Save</button>`;}
+else if(title==='Teachers Performance'){h+=`<input placeholder="Teacher Name"><input placeholder="Marks /100"><button class="btn" onclick="alert('Saved')">Save</button>`;}
+else if(title==='Tahfiizu Reports'){h+=`<div id="listBox"></div>`;document.getElementById('detailBody').innerHTML=h+'</div>';show('scr-detail');listTahfiizu();return;}
+else{h+=`<textarea placeholder="Write here..."></textarea><button class="btn" onclick="alert('Saved')">Save</button>`}
+h+=`</div>`;document.getElementById('detailBody').innerHTML=h;show('scr-detail');
+}
+async function saveStudent(){let n=document.getElementById('st-name').value.trim();if(!n){alert('Enter Name');return}await db.collection('students').add({name:n,cls:document.getElementById('st-class').value,parentName:document.getElementById('st-parent').value,fees:Number(document.getElementById('st-fees').value||0),paid:Number(document.getElementById('st-paid').value||0),parentId:currentUid,createdAt:new Date()});alert('Student Saved');listStudents();loadDashboard()}
+async function saveStaff(){let n=document.getElementById('sf-name').value.trim();if(!n){alert('Enter Name');return}await db.collection('staff').add({name:n,role:document.getElementById('sf-role').value,salary:Number(document.getElementById('sf-salary').value||0),createdAt:new Date()});alert('Staff Saved');listStaff()}
+async function saveFee(){let n=document.getElementById('fee-student').value.trim(),a=Number(document.getElementById('fee-amount').value||0);if(!n||!a){alert('Enter Name and Amount');return}await db.collection('fees').add({student:n,amount:a,date:new Date().toDateString(),createdAt:new Date()});alert('Payment Saved');listFees();loadDashboard()}
+async function saveAttendance(){let n=document.getElementById('at-name').value.trim();if(!n){alert('Enter Name');return}await db.collection('attendance').add({name:n,status:document.getElementById('at-status').value,date:new Date().toDateString(),createdAt:new Date()});alert('Attendance Saved');listAttendance();loadDashboard()}
+async function saveResult(){let n=document.getElementById('rs-name').value.trim();if(!n){alert('Enter Name');return}let e=Number(document.getElementById('rs-eng').value||0),m=Number(document.getElementById('rs-math').value||0),s=Number(document.getElementById('rs-sci').value||0);await db.collection('results').add({name:n,eng:e,math:m,sci:s,total:e+m+s,createdAt:new Date()});alert('Result Saved - Total '+(e+m+s));listResults()}
+async function saveNotice(){let t=document.getElementById('nt-text').value.trim();if(!t){alert('Write Notice');return}await db.collection('notices').add({text:t,by:userName,createdAt:new Date()});alert('Notice Sent');listNotices()}
+async function saveTahfiizu(){let n=document.getElementById('tf-name').value.trim();if(!n){alert('Enter Name');return}await db.collection('tahfiizu').add({name:n,from:document.getElementById('tf-from').value,to:document.getElementById('tf-to').value,note:document.getElementById('tf-note').value,date:new Date().toDateString(),createdAt:new Date()});alert('Saved');listTahfiizu()}
+async function listStudents(){let s=await db.collection('students').get();let h='';s.forEach(d=>{let x=d.data();if(x._init)return;h+=`<div class="card"><b>${x.name}</b> - ${x.cls||''}<br>Fees ${x.fees} | Paid ${x.paid} | Bal ${x.fees-x.paid}</div>`});document.getElementById('listBox').innerHTML=h||'No students yet.'}
+async function listStaff(){let s=await db.collection('staff').get();let h='';s.forEach(d=>{let x=d.data();if(x._init)return;h+=`<div class="card"><b>${x.name}</b> - ${x.role||''} - Salary ${x.salary||0}</div>`});document.getElementById('listBox').innerHTML=h||'No staff yet.'}
+async function listFees(){let s=await db.collection('fees').orderBy('createdAt','desc').limit(20).get();let h='';s.forEach(d=>{let x=d.data();if(x._init)return;h+=`<div class="card">${x.student} - Paid ${x.amount} - ${x.date}</div>`});document.getElementById('listBox').innerHTML=h||'No payments yet.'}
+async function listAttendance(){let s=await db.collection('attendance').where('date','==',new Date().toDateString()).get();let h='';s.forEach(d=>{let x=d.data();if(x._init)return;h+=`<div class="card">${x.name} - ${x.status}</div>`});document.getElementById('listBox').innerHTML=h||'No attendance today.'}
+async function listResults(){let s=await db.collection('results').orderBy('createdAt','desc').limit(20).get();let h='';s.forEach(d=>{let x=d.data();if(x._init)return;h+=`<div class="card">${x.name} - Eng ${x.eng} Math ${x.math} Sci ${x.sci} - Total ${x.total}/300</div>`});document.getElementById('listBox').innerHTML=h||'No results yet.'}
+async function listNotices(){let s=await db.collection('notices').orderBy('createdAt','desc').limit(20).get();let h='';s.forEach(d=>{let x=d.data();if(x._init)return;h+=`<div class="card">${x.text}<br><small>By ${x.by||''}</small></div>`});document.getElementById('listBox').innerHTML=h||'No notices yet.'}
+async function listMyChildren(){let s=await db.collection('students').where('parentId','==',currentUid).get();if(s.empty)s=await db.collection('students').where('parentName','==',userName).get();let h='';s.forEach(d=>{let x=d.data();if(x._init)return;h+=`<div class="card"><b>${x.name}</b> - ${x.cls}<br>Bal ${x.fees-x.paid}</div>`});document.getElementById('listBox').innerHTML=h||'No children found.'}
+async function listClasses(){let s=await db.collection('students').get();let map={};s.forEach(d=>{let c=d.data().cls||'No Class';if(d.data()._init)return;map[c]=(map[c]||0)+1});let h='';for(let k in map)h+=`<div class="card"><b>${k}</b> - ${map[k]} students</div>`;document.getElementById('listBox').innerHTML=h||'No classes yet.'}
+async function listTahfiizu(){let s=await db.collection('tahfiizu').orderBy('createdAt','desc').limit(20).get();let h='';s.forEach(d=>{let x=d.data();if(x._init)return;h+=`<div class="card">${x.name} - ${x.from} to ${x.to}<br>${x.note||''}</div>`});document.getElementById('listBox').innerHTML=h||'No presentation yet.'}
+async function listTimetable(){document.getElementById('listBox').innerHTML='No timetable yet.'}
+async function saveRolesToFirebase(){
+if(!selected.length){alert('Select 1 role');return}
+try{
+let doc=await db.collection('users').doc(currentUid).get();let isDev=doc.exists&&(doc.data().isDeveloper===true||isDevEmail(doc.data().email));
+if(isDev){await db.collection('users').doc(currentUid).update({roles:selected,approvedRoles:selected,approved:true,status:'approved'});approvedRoles=[...selected];alert('Developer roles saved.');renderRoleList();show('scr-role');return}
+await db.collection('users').doc(currentUid).update({roles:selected,approvedRoles:[],approved:false,status:'pending'});approvedRoles=[];alert('Roles saved. Waiting for Admin.');document.getElementById('waitRoles').innerText='You selected: '+selected.join(', ');show('scr-wait');
+}catch(e){alert(e.message)}
+}
+function logout(){if(confirm('Logout?')){authHandled=false;try{localStorage.removeItem('salaama_phone_lock')}catch(e){}if(auth)auth.signOut();show('scr-login')}}
+function toggleAI(){document.getElementById('aiBox').classList.toggle('hidden')}
+async function askAI(){let i=document.getElementById('aiInput');let q=i.value.trim();if(!q)return;let b=document.getElementById('chatBox');b.innerHTML+=`<div class="msg me">${q}</div>`;i.value='';let l=q.toLowerCase();let ans='';try{
+if(l.includes('how many')||l.includes('students')){let s=await db.collection('students').get();let n=0;s.forEach(d=>{if(!d.data()._init)n++});ans=`Real: You have ${n} students.`}
+else if(l.includes('balance')){let name=q.replace(/balance|of|\?/gi,'').trim();let s=await db.collection('students').get();let f=null;s.forEach(d=>{let x=d.data();if(x.name&&x.name.toLowerCase().includes(name.toLowerCase()))f=x});if(f)ans=`Real: ${f.name} - Fees ${f.fees} - Paid ${f.paid} - Balance ${(f.fees-f.paid).toLocaleString()}`;else ans=`No student found: ${name}`}
+else if(l.includes('attendance')){let s=await db.collection('attendance').where('date','==',new Date().toDateString()).get();ans=`Real: Today ${s.size} marked.`;s.forEach(d=>{if(!d.data()._init)ans+=` ${d.data().name}-${d.data().status},`})}
+else if(l.includes('top')||l.includes('result')){let s=await db.collection('results').orderBy('total','desc').limit(1).get();if(s.empty)ans='No results yet.';else s.forEach(d=>{let x=d.data();if(!x._init)ans=`Real Top: ${x.name} - Total ${x.total}/300`})}
+else if(l.includes('fees')||l.includes('collected')){let s=await db.collection('fees').get();let tot=0;s.forEach(d=>{if(!d.data()._init)tot+=Number(d.data().amount||0)});ans=`Real: Total Collected = ${tot.toLocaleString()}`}
+else if(l.includes('notice')){let s=await db.collection('notices').orderBy('createdAt','desc').limit(1).get();if(s.empty)ans='No notices yet.';else s.forEach(d=>{if(!d.data()._init)ans=`Latest Notice: ${d.data().text}`})}
+else if(l.includes('tahfiizu')||l.includes('quran')||l.includes('hifzu')){let s=await db.collection('tahfiizu').orderBy('createdAt','desc').limit(3).get();if(s.empty)ans='No Tahfiizu yet.';else{ans='Real Tahfiizu: ';s.forEach(d=>{let x=d.data();if(!x._init)ans+=`${x.name} ${x.from}-${x.to}, `})}}
+else if(l.includes('my child')||l.includes('my children')){let s=await db.collection('students').where('parentId','==',currentUid).get();if(s.empty)ans='No children found for you.';else{ans='Your children: ';s.forEach(d=>{let x=d.data();if(!x._init)ans+=`${x.name} Bal ${x.fees-x.paid}, `})}}
+else ans='Ask me: Balance of [name]? How many students? Attendance today? Top student? Fees collected? Latest notice? Tahfiizu? My children?';
+}catch(e){ans='Error: '+e.message}b.innerHTML+=`<div class="msg">${ans}</div>`;b.scrollTop=b.scrollHeight}
+setTimeout(()=>{try{document.getElementById('splash').style.display='none'}catch(e){}if(!authHandled){if(phoneLockEnabled()){let em='';try{em=localStorage.getItem('salaama_saved_email')||''}catch(e){}if(em)document.getElementById('unlockEmail').innerText=em;document.getElementById('unlockName').innerText=(localStorage.getItem('salaama_saved_name')||'User');show('scr-unlock')}else show('scr-login')}},1200);
+let deferredPrompt=null;window.addEventListener('beforeinstallprompt',(e)=>{e.preventDefault();deferredPrompt=e;document.getElementById('installBtn').style.display='block'});
+async function installApp(){if(deferredPrompt){deferredPrompt.prompt();await deferredPrompt.userChoice;deferredPrompt=null;document.getElementById('installBtn').style.display='none'}else{alert('Android: Chrome > 3 dots > Add to Home screen')}}
+</script></body></html>
