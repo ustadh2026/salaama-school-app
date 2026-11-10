@@ -25,7 +25,7 @@ jobs:
       - name: Install Capacitor 6 Stable
         run: |
           npm init -y
-          npm install @capacitor/cli@6.2.2 @capacitor/core@6.2.2 @capacitor/android@6.2.2
+          npm install @capacitor/cli@6.2.2 @capacitor/core@6.2.2 @capacitor/android@6.2.2 @capacitor/assets
 
       - name: Make Web Folder
         run: |
@@ -33,6 +33,13 @@ jobs:
           cp index.html www/index.html
           cp logo.png www/logo.png
           cp manifest.json www/manifest.json
+
+      - name: Make Real Icon + Splash from logo.png
+        run: |
+          mkdir -p assets
+          cp logo.png assets/icon.png
+          cp logo.png assets/splash.png
+          npx @capacitor/assets generate --iconBackgroundColor '#FFFFFF' --splashBackgroundColor '#FFFFFF'
 
       - name: Init Capacitor
         run: |
